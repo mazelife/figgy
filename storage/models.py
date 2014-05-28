@@ -18,19 +18,39 @@ class Book(BaseModel):
     '''
 
     id = models.CharField(max_length=30, primary_key=True, help_text="The primary identifier of this title, we get this value from publishers.")
+
+    def __unicode__(self):
+        return self.id
+
+    @property
+    def latest_edition(self):
+        return self.edition_set.first()
+
+    @property
+    def title(self):
+        return self.latest_edition.title
+
+
+class Edition(BaseModel):
+    '''
+    The edition of a particular book. Title and description vary across editions.
+    '''
+    book = models.ForeignKey("storage.Book")
+    version = models.DecimalField(max_digits=4, decimal_places=1, help_text="The version of the book.", db_index=True)
     title = models.CharField(max_length=128, help_text="The title of this book.", db_index=True, null=False, blank=False)
     description = models.TextField(blank=True, null=True, default=None, help_text="Very short description of this book.")
 
-    def __unicode__(self):
-        return u"Book %s" % self.title
-
     class Meta:
-        ordering = ['title']
+        ordering = ("book", "-version")
+        unique_together = (("book", "version"),)
+
+    def __unicode__(self):
+        return self.title
 
 
 class Alias(BaseModel):
     '''
-    A book can have one or more aliases which
+    A book can have one or more aliases which...?
 
     For example, a book can be referred to with an ISBN-10 (older, deprecated scheme), ISBN-13 (newer scheme),
     or any number of other aliases.

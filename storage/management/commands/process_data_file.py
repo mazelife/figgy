@@ -5,7 +5,9 @@
 from django.core.management.base import BaseCommand, CommandError
 
 from lxml import etree
+
 import storage.tools
+from storage.exceptions import BadDataFile
 
 
 class Command(BaseCommand):
@@ -17,4 +19,7 @@ class Command(BaseCommand):
             with open(filename, 'rb') as fh:
                 print "Importing %s into database." % filename
                 book_node = etree.parse(fh).getroot()
-                storage.tools.process_book_element(book_node)
+                try:
+                    storage.tools.process_book_element(book_node)
+                except BadDataFile, e:
+                    self.stdout.write("ERROR: {} Skipping this book.".format(e))
