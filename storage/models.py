@@ -20,7 +20,7 @@ class Book(BaseModel):
     id = models.CharField(max_length=30, primary_key=True, help_text="The primary identifier of this title, we get this value from publishers.")
 
     def __unicode__(self):
-        return self.id
+        return "Book {}".format(self.pk)
 
     @property
     def latest_edition(self):

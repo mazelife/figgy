@@ -18,6 +18,7 @@ class TestTools(TestCase):
         xml_str = '''
         <book id="12345">
             <title>A title</title>
+            <version>1.0</version>
             <aliases>
                 <alias scheme="ISBN-10" value="0158757819"/>
                 <alias scheme="ISBN-13" value="0000000000123"/>
