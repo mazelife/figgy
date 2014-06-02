@@ -30,6 +30,10 @@ class Book(BaseModel):
     def title(self):
         return self.latest_edition.title
 
+    @property
+    def description(self):
+        return self.latest_edition.description
+
 
 class Edition(BaseModel):
     '''
